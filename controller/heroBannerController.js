@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const { ObjectId, MongoClient } = require("mongodb");
 
+require("dotenv").config();
+
+console.log(process.env.DB_URI);
 const uri =
   "mongodb+srv://ayan:KZuASguNQ9rCZfh2@cluster0.tcz9h.mongodb.net/akacoin?retryWrites=true&w=majority";
 
@@ -78,7 +81,10 @@ module.exports.createHeroBanner = async (req, res) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 

@@ -5,6 +5,8 @@ const heroBannerRoutes = require("./routes/heroBannerRoute");
 const walletRoutes = require("./routes/walletRoute");
 const featureRoutes = require("./routes/featureRoute");
 
+require("dotenv").config();
+
 const app = express();
 
 //  middlewares
