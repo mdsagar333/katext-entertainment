@@ -73,6 +73,7 @@ module.exports.getBannerSingle = async (req, res, next) => {
 
 module.exports.createHeroBanner = async (req, res) => {
   try {
+    console.log("creating hero banner");
     const imagePath = `${req.protocol}://${req.headers.host}/images/${req.file.filename}`;
     req.body.image = imagePath;
     const banner = await Banner.insertOne({ ...req.body, active: false });
