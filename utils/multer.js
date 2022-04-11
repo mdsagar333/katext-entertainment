@@ -32,7 +32,7 @@ const videoStorage = multer.diskStorage({
 const uploadVideo = multer({
   storage: videoStorage,
   limits: {
-    fileSize: 10000000, // 10000000 Bytes = 10 MB
+    fileSize: 100000000, // 10000000 Bytes = 100 MB
   },
   fileFilter(req, file, cb) {
     // upload only mp4 and mkv format

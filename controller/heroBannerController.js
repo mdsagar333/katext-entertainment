@@ -40,11 +40,39 @@ module.exports.getHeroBanners = async (req, res, next) => {
   }
 };
 
+module.exports.getAheroBanner = async (req, res, next) => {
+  try {
+    console.log("banner");
+    const banner = await Banner.findOne({ active: true });
+    console.log(banner);
+    res.status(200).json({
+      status: "success",
+      banner,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getBannerSingle = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const heroBanner = await Banner.findOne({ _id: id });
+
+    res.status(200).json({
+      status: "success",
+      data: heroBanner,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports.createHeroBanner = async (req, res) => {
   try {
     const imagePath = `${req.protocol}://${req.headers.host}/images/${req.file.filename}`;
     req.body.image = imagePath;
-    const banner = await Banner.insertOne(req.body);
+    const banner = await Banner.insertOne({ ...req.body, active: false });
 
     res.status(201).json({
       status: "success",
@@ -67,6 +95,7 @@ module.exports.updateHeroBanner = async (req, res) => {
       fs.unlink(location, (err) => {});
     }
 
+    delete req.body.iamge;
     const updateBanner = await Banner.updateOne(
       { _id: id },
       { $set: req.body }
@@ -93,6 +122,26 @@ module.exports.deleteHeroBanner = async (req, res) => {
   }
 };
 
+module.exports.activateHeroBanner = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const deActivateBanner = await Banner.updateMany(
+      {},
+      { $set: { active: false } }
+    );
+    const activateBanner = await Banner.updateOne(
+      { _id: id },
+      { $set: { active: true } }
+    );
+
+    res.status(200).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //--------------------------------------------------------
 // ================ wallet controllers ===================
 // -------------------------------------------------------
@@ -100,7 +149,7 @@ module.exports.deleteHeroBanner = async (req, res) => {
 module.exports.createWallet = async (req, res, next) => {
   try {
     console.log(req.body);
-    const newWallet = await Wallets.insertOne(req.body);
+    const newWallet = await Wallets.insertOne({ ...req.body, active: false });
 
     res.status(201).json({
       status: "success",
@@ -123,14 +172,30 @@ module.exports.getWallets = async (req, res, next) => {
   }
 };
 
+module.exports.getWalletSingle = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const wallet = await Wallets.findOne({ _id: id });
+
+    res.status(200).json({
+      status: "success",
+      data: wallet,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports.updateWallet = async (req, res) => {
   try {
     const id = ObjectId(req.params.id);
+    console.log(req.body);
+    // const {title, description} = req.body
     const updateWallet = await Wallets.updateOne(
       { _id: id },
       { $set: req.body }
     );
-
+    console.log(updateWallet);
     res.status(200).json({
       status: "success",
     });
@@ -153,6 +218,26 @@ module.exports.deleteWallet = async (req, res) => {
   }
 };
 
+module.exports.activateWallet = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const deActivateWallets = await Wallets.updateMany(
+      {},
+      { $set: { active: false } }
+    );
+    const activateWallets = await Wallets.updateOne(
+      { _id: id },
+      { $set: { active: true } }
+    );
+
+    res.status(200).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //----------------------------------------------------------
 // ================ features controllers ===================
 // ---------------------------------------------------------
@@ -161,8 +246,9 @@ module.exports.createFeature = async (req, res, next) => {
   try {
     console.log(req.file);
     console.log(req.body);
+
     req.body.video = req.file.filename;
-    const newFeature = await Features.insertOne(req.body);
+    const newFeature = await Features.insertOne({ ...req.body, active: false });
 
     res.status(201).json({
       status: "success",
@@ -185,13 +271,39 @@ module.exports.getAllFeature = async (req, res, next) => {
   }
 };
 
+module.exports.getSingleFeature = async (req, res, next) => {
+  try {
+    const feature = await Features.findOne({ active: true });
+    console.log(feature);
+    res.status(200).json({
+      status: "success",
+      data: feature,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getFeature = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const feature = await Features.findOne({ _id: id });
+    res.status(200).json({
+      status: "success",
+      data: feature,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // send video streaming API endpoint
 
 module.exports.getVideo = async (req, res, next) => {
   try {
     const fileName = req.params.name;
     const location = path.join(`${__dirname}`, "../public/videos", fileName);
-
+    console.log(fileName);
     const range = req.headers.range;
     if (!range) {
       res.status(400).send("Requires Range header");
@@ -214,6 +326,65 @@ module.exports.getVideo = async (req, res, next) => {
     res.writeHead(206, headers);
     const videoStream = fs.createReadStream(location, { start, end });
     videoStream.pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.updateFeature = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+
+    if (req.file) {
+      const fileName = req.body.prevVideo;
+      console.log(fileName);
+      req.body.video = req.file.fileName;
+      const location = path.join(`${__dirname}`, "../public/videos", fileName);
+      fs.unlink(location, (err) => {});
+    }
+
+    const updateFeature = await Features.updateOne(
+      { _id: id },
+      { $set: req.body }
+    );
+    res.status(200).json({
+      status: "success",
+    });
+
+    console.log(id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.deleteFeature = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const deletedFeature = await Features.deleteOne({ _id: id });
+
+    res.status(204).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.activateFeature = async (req, res, next) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const deActivateFeatures = await Features.updateMany(
+      {},
+      { $set: { active: false } }
+    );
+    const activateFeatures = await Features.updateOne(
+      { _id: id },
+      { $set: { active: true } }
+    );
+
+    res.status(200).json({
+      status: "success",
+    });
   } catch (err) {
     console.log(err);
   }
