@@ -19,7 +19,10 @@ client
     console.log("DB connectted successfully!");
   })
   .catch((err) => {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   });
 
 const Banner = client.db("akacoin").collection("heroBanner");
@@ -39,7 +42,10 @@ module.exports.getHeroBanners = async (req, res, next) => {
       data: banners,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -53,7 +59,10 @@ module.exports.getAheroBanner = async (req, res, next) => {
       banner,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -67,7 +76,10 @@ module.exports.getBannerSingle = async (req, res, next) => {
       data: heroBanner,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -112,7 +124,10 @@ module.exports.updateHeroBanner = async (req, res) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -125,7 +140,10 @@ module.exports.deleteHeroBanner = async (req, res) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -145,7 +163,10 @@ module.exports.activateHeroBanner = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -162,7 +183,10 @@ module.exports.createWallet = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -175,7 +199,10 @@ module.exports.getWallets = async (req, res, next) => {
       data: wallets,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -189,7 +216,10 @@ module.exports.getWalletSingle = async (req, res, next) => {
       data: wallet,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -207,7 +237,10 @@ module.exports.updateWallet = async (req, res) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -221,7 +254,10 @@ module.exports.deleteWallet = async (req, res) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -241,7 +277,10 @@ module.exports.activateWallet = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -261,7 +300,10 @@ module.exports.createFeature = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -274,7 +316,10 @@ module.exports.getAllFeature = async (req, res, next) => {
       data: getAllFeatures,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -287,7 +332,10 @@ module.exports.getSingleFeature = async (req, res, next) => {
       data: feature,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -300,7 +348,10 @@ module.exports.getFeature = async (req, res, next) => {
       data: feature,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -334,7 +385,10 @@ module.exports.getVideo = async (req, res, next) => {
     const videoStream = fs.createReadStream(location, { start, end });
     videoStream.pipe(res);
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -360,7 +414,10 @@ module.exports.updateFeature = async (req, res, next) => {
 
     console.log(id);
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -373,7 +430,10 @@ module.exports.deleteFeature = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
 
@@ -393,6 +453,9 @@ module.exports.activateFeature = async (req, res, next) => {
       status: "success",
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      err,
+    });
   }
 };
